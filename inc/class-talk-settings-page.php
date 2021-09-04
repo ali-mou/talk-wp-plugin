@@ -78,6 +78,15 @@ class Talk_Settings_Page {
 		register_setting( 'talk-settings', 'coral_talk_container_classes' );
 
 		add_settings_field(
+			'coral_talk_jwt_secret',
+			__( 'JWT secret token', 'coral-project-talk' ),
+			array( $this, 'render_jwt_secret_field' ),
+			'talk-settings',
+			'about-talk'
+		);
+		register_setting( 'talk-settings', 'coral_talk_jwt_secret' );
+
+		add_settings_field(
 			'coral_talk_version',
 			__( 'Version', 'coral-project-talk' ),
 			array( $this, 'render_version_field' ),
@@ -133,6 +142,27 @@ class Talk_Settings_Page {
 				value="<?php echo esc_url( get_option( 'coral_talk_static_url' ) ); ?>"
 		/>
 		<p class="description">The root url where static Coral assets should be served from. This is the same value as <a href="<?php echo esc_url( 'https://docs.coralproject.net/talk/advanced-configuration/#talk-static-uri' ); ?>">STATIC_URI</a> defined in the Coral application configuration.</p>
+		<?php
+	}
+
+	/**
+	 * Prints input field for settings.
+	 *
+	 * @since 0.0.3
+	 */
+	public function render_jwt_secret_field() {
+		?>
+		<input
+			style="width: 600px; height: 40px;"
+			name="coral_talk_jwt_secret"
+			placeholder=""
+			id="coral_talk_jwt_secret"
+			type="text"
+			value="<?php echo esc_attr( get_option( 'coral_talk_jwt_secret' ) ); ?>"
+		/>
+
+		<p class="description">Secret token for generating jwt access tokens. You can find this token in the authentication page(SSO) of Coral(http://CORAL_DOMAIN/admin/configure/auth).</p>
+
 		<?php
 	}
 

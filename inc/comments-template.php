@@ -22,15 +22,23 @@ endif;
 if ( $talk_version == "5" ) : ?>
 	<div class="<?php echo esc_attr( $talk_container_classes ); ?>" id="coral_thread"></div>
 	<script type="text/javascript">
+	var embed;
 	(function() {
 		var d = document, s = d.createElement('script');
+		var coralConfig = {
+			id: "coral_thread",
+			autoRender: true,
+			rootURL: "<?php echo esc_url( $talk_url ); ?>"
+		}
+
+		<?php if ($jwt_token = coral_talk_generate_jwt_token()): ?>
+			coralConfig.accessToken = "<?php echo $jwt_token; ?>";
+		<?php endif ?>
+
 		s.src = "<?php echo esc_url( $talk_url . '/assets/js/embed.js' ); ?>"
+
 		s.onload = function() {
-			Coral.createStreamEmbed({
-				id: "coral_thread",
-				autoRender: true,
-				rootURL: "<?php echo esc_url( $talk_url ); ?>"
-			});
+			embed = Coral.createStreamEmbed(coralConfig);
 		};
 		(d.head || d.body).appendChild(s);
 	})();
